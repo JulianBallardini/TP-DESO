@@ -1,0 +1,770 @@
+@startuml diagrama_clases_capital_humano_completo
+skinparam classAttributeIconSize 0
+skinparam linetype polyline
+
+skinparam classBackgroundColor<<entity>> #FFFFFF
+skinparam classBackgroundColor<<dto>> #B0E0E6
+skinparam classBackgroundColor<<dao>> #FC8B79
+skinparam classBackgroundColor<<service>> #F6D365
+skinparam classBackgroundColor<<boundary>> #FFFF99
+skinparam classBorderColor #3a7ab5
+skinparam ArrowColor #444444
+
+' ============================================================
+' ENUMERACIONES
+' ============================================================
+enum EstadoCuestionario {
+  ACTIVO
+  EN_PROCESO
+  COMPLETO
+  INCOMPLETO
+  SIN_CONTESTAR
+}
+
+enum TipoDocumento {
+  DNI
+  LE
+  LC
+  PP
+}
+
+enum Genero {
+  H
+  M
+  X
+}
+
+' ============================================================
+' ENTIDADES (Modelo de Dominio)
+' ============================================================
+entity Usuario <<entity>> {
+  - idUsuario : int
+  - nombre : String
+  - activo : boolean
+}
+
+entity Candidato <<entity>> {
+  - nroCandidato : int
+  - apellido : String
+  - nombre : String
+  - nroDocumento : String
+  - tipoDocumento : TipoDocumento
+  - fechaNacimiento : Date
+  - genero : Genero
+  - nacionalidad : String
+  - email : String
+  - escolaridad : String
+  - eliminado : boolean
+}
+
+entity Evaluacion <<entity>> {
+  - idEvaluacion : int
+  - fechaCreacion : Date
+}
+
+entity Cuestionario <<entity>> {
+  - idCuestionario : int
+  - clave : String
+  - estado : EstadoCuestionario
+  - fechaHoraInicio : DateTime
+  - fechaHoraFin : DateTime
+  - fechaHoraUltimoIngreso : DateTime
+  - cantidadAccesos : int
+  - maximoAccesos : int
+  - tiempoMaximo : int
+}
+
+entity Puesto <<entity>> {
+  - codigo : String
+  - nombre : String
+  - descripcion : String
+  - empresa : String
+  - activo : boolean
+}
+
+entity CaracteristicaPuesto <<entity>> {
+  - ponderacionMinima : double
+}
+
+entity Competencia <<entity>> {
+  - codigo : String
+  - nombre : String
+  - descripcion : String
+  - activo : boolean
+}
+
+entity Factor <<entity>> {
+  - codigo : String
+  - nombre : String
+  - descripcion : String
+  - nroOrden : int
+  - activo : boolean
+}
+
+entity BloquePreguntas <<entity>> {
+  - idBloque : int
+  - nroBloque : int
+  - completado : boolean
+}
+
+entity Pregunta <<entity>> {
+  - idPregunta : int
+  - nombre : String
+  - textoPregunta : String
+  - descripcion : String
+  - activo : boolean
+}
+
+entity OpcionRespuesta <<entity>> {
+  - idOpcionRespuesta : int
+  - nombre : String
+  - descripcion : String
+  - activo : boolean
+}
+
+entity ItemOpcionRespuesta <<entity>> {
+  - orden : int
+  - descripcion : String
+}
+
+entity PreguntaCuestionario <<entity>> {
+  - idPregCuest : int
+  - nroOrden : int
+  - respondida : boolean
+}
+
+entity ResultadoFactor <<entity>> {
+  - puntajeObtenido : double
+}
+
+entity ResultadoCompetencia <<entity>> {
+  - puntajeObtenido : double
+}
+
+entity RegistroAuditoria <<entity>> {
+  - idRegistro : int
+  - fechaHora : DateTime
+  - usuario : String
+  - accion : String
+  - entidad : String
+  - idEntidad : int
+}
+
+entity ConfiguracionSistema <<entity>> {
+  - clave : String
+  - valor : String
+  - descripcion : String
+}
+
+entity OpcionPregunta <<entity>> {
+  - idOpcionPregunta : int
+  - ponderacion : double
+}
+
+' ============================================================
+' DTOs (Objetos de Transporte Gestor <-> UI)
+' ============================================================
+class UsuarioDTO <<dto>> {
+  - idUsuario : int
+  - nombre : String
+  - activo : boolean
+}
+
+class CandidatoGestionDTO <<dto>> {
+  - nroCandidato : int
+  - apellido : String
+  - nombre : String
+  - tipoDocumento : TipoDocumento
+  - nroDocumento : String
+  - email : String
+}
+
+class CandidatoCuestionarioDTO <<dto>> {
+  - idCuestionario : int
+  - nroCandidato : int
+  - apellido : String
+  - nombre : String
+  - estado : EstadoCuestionario
+}
+
+class CandidatoOrdenMeritoDTO <<dto>> {
+  - tipoDocumento : TipoDocumento
+  - nroDocumento : String
+  - apellido : String
+  - nombre : String
+  - puntajeObtenido : double
+  - estadoCuestionario : EstadoCuestionario
+  - fechaInicio : DateTime
+  - fechaFin : DateTime
+  - fechaHoraUltimoIngreso : DateTime
+  - cantidadAccesos : int
+}
+
+class ResultadoComparativoDTO <<dto>> {
+  - competencia : String
+  - puntajeRequerido : double
+  - puntajeObtenido : double
+}
+
+class ResultadoImportacionDTO <<dto>> {
+  - cantidadCreados : int
+  - cantidadActualizados : int
+  - cantidadEliminados : int
+}
+
+class PuestoDTO <<dto>> {
+  - codigo : String
+  - nombre : String
+  - descripcion : String
+  - empresa : String
+  - activo : boolean
+  - caracteristicas : List<CaracteristicaPuestoDTO>
+}
+
+class CaracteristicaPuestoDTO <<dto>> {
+  - codigoCompetencia : String
+  - nombreCompetencia : String
+  - ponderacionMinima : double
+}
+
+class CompetenciaDTO <<dto>> {
+  - codigo : String
+  - nombre : String
+  - descripcion : String
+  - activo : boolean
+}
+
+class FactorDTO <<dto>> {
+  - codigo : String
+  - nombre : String
+  - descripcion : String
+  - nroOrden : int
+  - activo : boolean
+  - nombreCompetencia : String
+}
+
+class PreguntaDTO <<dto>> {
+  - idPregunta : int
+  - nombre : String
+  - textoPregunta : String
+  - descripcion : String
+  - activo : boolean
+  - nombreCompetencia : String
+  - nombreFactor : String
+}
+
+class PreguntaExamenDTO <<dto>> {
+  - idPregCuest : int
+  - nroOrden : int
+  - textoPregunta : String
+  - descripcion : String
+  - opciones : List<OpcionPreguntaDTO>
+}
+
+class RespuestaCandidatoDTO <<dto>> {
+  - idPregCuest : int
+  - idOpcionPregunta : int
+}
+
+class OpcionRespuestaDTO <<dto>> {
+  - idOpcionRespuesta : int
+  - nombre : String
+  - descripcion : String
+  - activo : boolean
+  - items : List<ItemOpcionRespuestaDTO>
+}
+
+class ItemOpcionRespuestaDTO <<dto>> {
+  - orden : int
+  - descripcion : String
+}
+
+class EvaluacionDTO <<dto>> {
+  - idEvaluacion : int
+  - nombrePuesto : String
+  - fechaCreacion : Date
+  - cantidadCandidatos : int
+}
+
+class OpcionPreguntaDTO <<dto>> {
+  - idOpcionPregunta : int
+  - orden : int
+  - descripcion : String
+  - ponderacion : double
+}
+
+' ============================================================
+' DAOs (Interfaces de Acceso a Datos - Solo Entidades)
+' ============================================================
+interface IUsuarioDAO <<dao>> {
+  + buscarPorUser(user: String) : Usuario
+  + findById(id: int) : Usuario
+}
+
+interface ICandidatoDAO <<dao>> {
+  + buscar(apellido: String, nombre: String, nro: int) : List<Candidato>
+  + buscarPorDocumento(tipo: TipoDocumento, nro: String) : Candidato
+  + findById(id: int) : Candidato
+  + guardar(c: Candidato) : void
+  + actualizar(c: Candidato) : void
+  + eliminarLogico(id: int) : void
+}
+
+interface IPuestoDAO <<dao>> {
+  + buscar(codigo: String, nombre: String, empresa: String) : List<Puesto>
+  + findById(id: int) : Puesto
+  + guardar(p: Puesto) : void
+  + actualizar(p: Puesto) : void
+  + eliminarLogico(id: int) : void
+  + validarEnUso(id: int) : boolean
+}
+
+interface ICompetenciaDAO <<dao>> {
+  + buscar(nombre: String) : List<Competencia>
+  + findById(id: int) : Competencia
+  + guardar(comp: Competencia) : void
+  + actualizar(comp: Competencia) : void
+  + eliminarLogico(id: int) : void
+  + validarEnUso(id: int) : boolean
+}
+
+interface IFactorDAO <<dao>> {
+  + buscar(comp: String, nombre: String) : List<Factor>
+  + findById(id: int) : Factor
+  + guardar(factor: Factor) : void
+  + actualizar(factor: Factor) : void
+  + eliminarLogico(id: int) : void
+}
+
+interface IPreguntaDAO <<dao>> {
+  + buscarPreguntas(comp: String, factor: String, nombre: String) : List<Pregunta>
+  + findById(id: int) : Pregunta
+  + guardar(preg: Pregunta) : void
+  + actualizar(preg: Pregunta) : void
+  + eliminarLogico(id: int) : void
+  + eliminarPorFactor(idFactor: int) : List<Pregunta>
+}
+
+interface IOpcionRespuestaDAO <<dao>> {
+  + buscarOpciones(nombre: String) : List<OpcionRespuesta>
+  + findById(id: int) : OpcionRespuesta
+  + guardar(op: OpcionRespuesta) : void
+  + actualizar(op: OpcionRespuesta) : void
+  + eliminarLogico(id: int) : void
+  + validarEnUso(id: int) : boolean
+}
+
+interface IEvaluacionDAO <<dao>> {
+  + guardar(evaluacion: Evaluacion) : void
+  + findById(id: int) : Evaluacion
+  + listarPorPuesto(idPuesto: int) : List<Evaluacion>
+}
+
+interface ICuestionarioDAO <<dao>> {
+  + guardar(cuestionario: Cuestionario) : void
+  + actualizar(cuestionario: Cuestionario) : void
+  + findById(id: int) : Cuestionario
+  + buscarActivoPorCandidato(idCandidato: int) : Cuestionario
+  + buscarPorClaveYDoc(tipo: TipoDocumento, nro: String, clave: String) : Cuestionario
+  + listarVencidos() : List<Cuestionario>
+  + listarPorPuestoYEvaluacion(idPuesto: int, idEvaluacion: int) : List<Cuestionario>
+}
+
+interface IBloquePreguntasDAO <<dao>> {
+  + guardar(bloque: BloquePreguntas) : void
+  + findById(id: int) : BloquePreguntas
+  + recuperarBloquesPorCuestionario(cuestionarioId: int) : List<BloquePreguntas>
+}
+
+interface IPreguntaCuestionarioDAO <<dao>> {
+  + guardar(p: PreguntaCuestionario) : void
+  + actualizar(p: PreguntaCuestionario) : void
+  + recuperarPorBloque(bloqueId: int) : List<PreguntaCuestionario>
+}
+
+interface IRegistroAuditoriaDAO <<dao>> {
+  + guardar(registro: RegistroAuditoria) : void
+}
+
+interface IConfiguracionSistemaDAO <<dao>> {
+  + obtener(clave: String) : ConfiguracionSistema
+}
+
+' ============================================================
+' SERVICES / GESTORES (Logica de Negocio y Mapeo DTO)
+' ============================================================
+class GestorAutenticacion <<service>> {
+  + autenticarConsultor(user: String, pass: String) : UsuarioDTO
+  + autenticarCandidato(tipo: TipoDocumento, nro: String, clave: String) : CandidatoCuestionarioDTO
+  + cerrarSesion() : void
+}
+
+class GestorPuestos <<service>> {
+  + buscarPuestos(codigo: String, nombre: String, empresa: String) : List<PuestoDTO>
+  + altaPuesto(puesto: PuestoDTO) : void
+  + modificarPuesto(puesto: PuestoDTO) : void
+  + bajaPuesto(id: int) : void
+  + validarPuestoEnUso(id: int) : boolean
+}
+
+class GestorCompetencias <<service>> {
+  + buscarCompetencias(nombre: String) : List<CompetenciaDTO>
+  + altaCompetencia(comp: CompetenciaDTO) : void
+  + modificarCompetencia(comp: CompetenciaDTO) : void
+  + bajaCompetencia(id: int) : void
+  + validarCompetenciaEnUso(id: int) : boolean
+}
+
+class GestorFactores <<service>> {
+  + buscarFactores(comp: String, nombre: String) : List<FactorDTO>
+  + altaFactor(factor: FactorDTO) : void
+  + modificarFactor(factor: FactorDTO) : void
+  + bajaFactor(id: int) : void
+}
+
+class GestorPreguntas <<service>> {
+  + buscarPreguntas(comp: String, factor: String, nombre: String) : List<PreguntaDTO>
+  + altaPregunta(pregunta: PreguntaDTO) : void
+  + modificarPregunta(pregunta: PreguntaDTO) : void
+  + bajaPregunta(id: int) : void
+  + generarConIA(comp: CompetenciaDTO, factor: FactorDTO) : PreguntaDTO
+}
+
+class GestorOpcionesRespuesta <<service>> {
+  + buscarOpciones(nombre: String) : List<OpcionRespuestaDTO>
+  + altaOpcion(opcion: OpcionRespuestaDTO) : void
+  + modificarOpcion(opcion: OpcionRespuestaDTO) : void
+  + bajaOpcion(id: int) : void
+  + validarOpcionEnUso(id: int) : boolean
+}
+
+class GestorEvaluaciones <<service>> {
+  + buscarCandidatos(apellido: String, nombre: String, nro: int) : List<CandidatoGestionDTO>
+  + validarCandidatosActivos(candidatos: List<CandidatoGestionDTO>) : List<CandidatoGestionDTO>
+  + generarEvaluacion(idPuesto: int, candidatos: List<CandidatoGestionDTO>) : void
+  + exportarClavesExcel(idEvaluacion: int, carpeta: String) : void
+}
+
+class GestorCuestionario <<service>> {
+  + iniciarCuestionario(cuestionarioId: int) : void
+  + recuperarBloque(cuestionarioId: int, nroBloque: int) : List<PreguntaExamenDTO>
+  + guardarBloque(cuestionarioId: int, respuestas: List<RespuestaCandidatoDTO>) : void
+  + calcularPuntaje(cuestionarioId: int) : void
+  + finalizarCuestionario(cuestionarioId: int) : void
+  + verificarTiempoMaximo(cuestionarioId: int) : boolean
+  + verificarAccesosMaximos(cuestionarioId: int) : boolean
+  - seleccionarPreguntasAleatorias(competencias: List<Competencia>) : List<Pregunta>
+}
+
+class GestorReportes <<service>> {
+  + listarEvaluaciones(idPuesto: int) : List<EvaluacionDTO>
+  + generarReporteComparativo(idCandidato: int, idPuesto: int) : List<ResultadoComparativoDTO>
+  + generarOrdenMerito(idPuesto: int, idEvaluaciones: List<int>) : List<CandidatoOrdenMeritoDTO>
+  + exportarResultadosCSV(idPuesto: int, carpeta: String) : void
+}
+
+class ImportadorExportador <<service>> {
+  + importarCandidatos(archivo: String) : ResultadoImportacionDTO
+}
+
+class ServicioIA <<service>> implements IServicioIA {
+  + generarPregunta(comp: CompetenciaDTO, factor: FactorDTO, opciones: OpcionRespuestaDTO) : PreguntaDTO
+  - invocarAPI(params: Map) : String
+  - parsearRespuesta(json: String) : PreguntaDTO
+}
+
+class FinalizarCuestionarios <<service>> {
+  + ejecutar() : void
+  + finalizarVencidos() : void
+  + finalizarSinContestar() : void
+  - registrarEjecucion(accion: String) : void
+}
+
+class CandidatoCSVAdapter <<service>> implements ICandidatoImportador {
+  + importar(archivo: String) : List<Candidato>
+  - parsearCSV(archivo: String) : List  - mapearCandidato(fila: Map) : Candidato
+}
+
+class ExportadorResultadosCSV <<service>> {
+  + exportar(puesto: Puesto, carpeta: String) : void
+}
+
+class ExportadorCandidatosExcel <<service>> {
+  + exportar(candidatos: List<Candidato>, carpeta: String) : void
+}
+
+' ============================================================
+' BOUNDARY / UI
+' ============================================================
+class UIAutenticacion <<boundary>> {
+  + mostrarLogin() : void
+  + seleccionarTipoAcceso() : void
+  + mostrarError(mensaje: String) : void
+  + limpiarCampos() : void
+}
+
+class UIGestionPuestos <<boundary>> {
+  + mostrarBusqueda() : void
+  + mostrarListado(puestos: List<PuestoDTO>) : void
+  + mostrarFormulario(puesto: PuestoDTO) : void
+  + mostrarConfirmacionBaja(nombre: String) : boolean
+  + mostrarMensaje(msg: String) : void
+}
+
+class UIGestionCompetencias <<boundary>> {
+  + mostrarBusqueda() : void
+  + mostrarListado(competencias: List<CompetenciaDTO>) : void
+  + mostrarFormulario(comp: CompetenciaDTO) : void
+  + mostrarConfirmacionBaja(nombre: String) : boolean
+}
+
+class UIGestionFactores <<boundary>> {
+  + mostrarBusqueda() : void
+  + mostrarListado(factores: List<FactorDTO>) : void
+  + mostrarFormulario(factor: FactorDTO) : void
+  + mostrarConfirmacionBaja(nombre: String) : boolean
+}
+
+class UIGestionPreguntas <<boundary>> {
+  + mostrarBusqueda() : void
+  + mostrarListado(preguntas: List<PreguntaDTO>) : void
+  + mostrarFormulario(pregunta: PreguntaDTO) : void
+  + mostrarGridOpciones(opcion: OpcionRespuestaDTO) : void
+  + mostrarVentanaGenIA() : void
+  + mostrarConfirmacionBaja(nombre: String) : boolean
+}
+
+class UIGestionOpciones <<boundary>> {
+  + mostrarBusqueda() : void
+  + mostrarListado(opciones: List<OpcionRespuestaDTO>) : void
+  + mostrarFormulario(opcion: OpcionRespuestaDTO) : void
+  + mostrarConfirmacionBaja(nombre: String) : boolean
+}
+
+class UIEvaluarCandidatos <<boundary>> {
+  + mostrarBusquedaCandidatos() : void
+  + mostrarGridCandidatos(candidatos: List<CandidatoGestionDTO>) : void
+  + mostrarGridSeleccionados(candidatos: List<CandidatoGestionDTO>) : void
+  + mostrarSeleccionPuesto(puestos: List<PuestoDTO>) : void
+  + mostrarCompetenciasPuesto(comp: List<CompetenciaDTO>) : void
+  + mostrarListaFinalCandidatos(candidatos: List<CandidatoGestionDTO>) : void
+  + confirmarExportacion() : boolean
+  + seleccionarCarpetaExcel() : String
+}
+
+class UICompletarCuestionario <<boundary>> {
+  + mostrarInstrucciones() : void
+  + mostrarBloque(preguntas: List<PreguntaExamenDTO>, nroBloque: int) : void
+  + mostrarProgreso(actual: int, total: int) : void
+  + mostrarError(msg: String) : void
+  + mostrarFinalizado() : void
+  + emitirAlertaSonora() : void
+}
+
+class UIReportes <<boundary>> {
+  + mostrarBusquedaFuncion() : void
+  + mostrarListaCandidatos(candidatos: List<CandidatoGestionDTO>) : void
+  + mostrarGraficoComparativo(resultados: List<ResultadoComparativoDTO>) : void
+  + mostrarOrdenMerito(resultados: List<CandidatoOrdenMeritoDTO>) : void
+  + mostrarFiltroEvaluaciones(evaluaciones: List<EvaluacionDTO>) : void
+}
+
+class UIImportarExportar <<boundary>> {
+  + seleccionarArchivoCSV() : String
+  + mostrarProgreso(porcentaje: int) : void
+  + mostrarEstadisticaImportacion(resultado: ResultadoImportacionDTO) : void
+  + seleccionarCarpetaDestino() : String
+}
+
+' ============================================================
+' INTERFACES TECNICAS
+' ============================================================
+interface IServicioIA {
+  + generarPregunta(comp: CompetenciaDTO, factor: FactorDTO, opciones: OpcionRespuestaDTO) : PreguntaDTO
+}
+
+interface ICandidatoImportador {
+  + importar(archivo: String) : List<Candidato>
+}
+
+' ============================================================
+' RELACIONES ENTRE ENTIDADES (Dominio Puro)
+' ============================================================
+Candidato "1" o-- "0..*" Cuestionario : tiene >
+Evaluacion "1" o-- "1..*" Cuestionario : agrupa >
+Evaluacion "*" --> "1" Puesto : es para >
+Evaluacion "*" --> "1" Usuario : creada por >
+Puesto "1" *-- "1..*" CaracteristicaPuesto : define >
+CaracteristicaPuesto "*" --> "1" Competencia : evalua >
+Competencia "1" *-- "0..*" Factor : se compone de >
+Factor "1" *-- "0..*" Pregunta : tiene >
+
+Pregunta "*" --> "1" OpcionRespuesta : usa >
+Pregunta  "1" *-- "2..*" OpcionPregunta : configura pesos >
+
+OpcionRespuesta "1" *-- "2..*" ItemOpcionRespuesta : compuesto por >
+
+OpcionPregunta "*" --> "1" ItemOpcionRespuesta : corresponde a >
+
+Cuestionario "1" *-- "1..*" BloquePreguntas : organiza >
+BloquePreguntas "1" *-- "1..*" PreguntaCuestionario : agrupa >
+
+PreguntaCuestionario "*" --> "1" Pregunta : referencia >
+PreguntaCuestionario "*" --> "0..1" OpcionPregunta : respuesta elegida >
+
+Cuestionario "1" o-- "0..*" ResultadoFactor : registra >
+Cuestionario "1" o-- "0..*" ResultadoCompetencia : registra >
+ResultadoFactor "*" --> "1" Factor : corresponde a >
+ResultadoCompetencia "*" --> "1" Competencia : corresponde a >
+
+' ============================================================
+' RELACIONES ENTRE DTOs (Composicion de Transporte)
+' ============================================================
+PuestoDTO "1" *-- "1..*" CaracteristicaPuestoDTO : contiene >
+OpcionRespuestaDTO "1" *-- "2..*" ItemOpcionRespuestaDTO : contiene >
+
+PreguntaDTO "1" *-- "2..*" OpcionPreguntaDTO : contiene >
+OpcionPreguntaDTO "*" --> "1" ItemOpcionRespuestaDTO : referencia texto >
+PreguntaExamenDTO "1" *-- "2..*" OpcionPreguntaDTO : ofrece opciones >
+
+' ============================================================
+' RELACIONES DAO -> ENTIDAD (Persistencia pura)
+' ============================================================
+IUsuarioDAO ..> Usuario : <<persiste/recupera>>
+ICandidatoDAO ..> Candidato : <<persiste/recupera>>
+IPuestoDAO ..> Puesto : <<persiste/recupera>>
+ICompetenciaDAO ..> Competencia : <<persiste/recupera>>
+IFactorDAO ..> Factor : <<persiste/recupera>>
+IPreguntaDAO ..> Pregunta : <<persiste/recupera>>
+IOpcionRespuestaDAO ..> OpcionRespuesta : <<persiste/recupera>>
+IEvaluacionDAO ..> Evaluacion : <<persiste/recupera>>
+ICuestionarioDAO ..> Cuestionario : <<persiste/recupera>>
+IBloquePreguntasDAO ..> BloquePreguntas : <<persiste/recupera>>
+IPreguntaCuestionarioDAO ..> PreguntaCuestionario : <<persiste/recupera>>
+IRegistroAuditoriaDAO ..> RegistroAuditoria : <<persiste>>
+IConfiguracionSistemaDAO ..> ConfiguracionSistema : <<recupera>>
+
+' ============================================================
+' RELACIONES SERVICE / GESTOR -> DAO / DTO / ENTIDAD
+' ============================================================
+GestorAutenticacion ..> IUsuarioDAO : <<usa>>
+GestorAutenticacion ..> ICandidatoDAO : <<usa>>
+GestorAutenticacion ..> ICuestionarioDAO : <<usa>>
+GestorAutenticacion ..> UsuarioDTO : <<arma/devuelve>>
+GestorAutenticacion ..> CandidatoCuestionarioDTO : <<arma/devuelve>>
+
+GestorPuestos ..> IPuestoDAO : <<usa>>
+GestorPuestos ..> IRegistroAuditoriaDAO : <<usa>>
+GestorPuestos ..> PuestoDTO : <<arma/procesa>>
+GestorPuestos ..> Puesto : <<manipula>>
+
+GestorCompetencias ..> ICompetenciaDAO : <<usa>>
+GestorCompetencias ..> IRegistroAuditoriaDAO : <<usa>>
+GestorCompetencias ..> CompetenciaDTO : <<arma/procesa>>
+GestorCompetencias ..> Competencia : <<manipula>>
+
+GestorFactores ..> IFactorDAO : <<usa>>
+GestorFactores ..> IPreguntaDAO : <<usa>>
+GestorFactores ..> IRegistroAuditoriaDAO : <<usa>>
+GestorFactores ..> FactorDTO : <<arma/procesa>>
+GestorFactores ..> Factor : <<manipula>>
+
+GestorPreguntas ..> IPreguntaDAO : <<usa>>
+GestorPreguntas ..> IFactorDAO : <<usa>>
+GestorPreguntas ..> IOpcionRespuestaDAO : <<usa>>
+GestorPreguntas ..> IRegistroAuditoriaDAO : <<usa>>
+GestorPreguntas ..> IServicioIA : <<delega>>
+GestorPreguntas ..> PreguntaDTO : <<arma/procesa>>
+GestorPreguntas ..> Pregunta : <<manipula>>
+
+GestorOpcionesRespuesta ..> IOpcionRespuestaDAO : <<usa>>
+GestorOpcionesRespuesta ..> IRegistroAuditoriaDAO : <<usa>>
+GestorOpcionesRespuesta ..> OpcionRespuestaDTO : <<arma/procesa>>
+GestorOpcionesRespuesta ..> OpcionRespuesta : <<manipula>>
+
+GestorEvaluaciones ..> ICandidatoDAO : <<usa>>
+GestorEvaluaciones ..> IPuestoDAO : <<usa>>
+GestorEvaluaciones ..> IEvaluacionDAO : <<usa>>
+GestorEvaluaciones ..> ICuestionarioDAO : <<usa>>
+GestorEvaluaciones ..> ExportadorCandidatosExcel : <<usa>>
+GestorEvaluaciones ..> CandidatoGestionDTO : <<arma/procesa>>
+GestorEvaluaciones ..> PuestoDTO : <<usa>>
+
+GestorCuestionario ..> ICuestionarioDAO : <<usa>>
+GestorCuestionario ..> IBloquePreguntasDAO : <<usa>>
+GestorCuestionario ..> IPreguntaCuestionarioDAO : <<usa>>
+GestorCuestionario ..> IConfiguracionSistemaDAO : <<usa>>
+GestorCuestionario ..> PreguntaExamenDTO : <<arma/devuelve>>
+GestorCuestionario ..> RespuestaCandidatoDTO : <<recibe/procesa>>
+GestorCuestionario ..> Cuestionario : <<manipula>>
+
+GestorReportes ..> ICuestionarioDAO : <<usa>>
+GestorReportes ..> IPuestoDAO : <<usa>>
+GestorReportes ..> IEvaluacionDAO : <<usa>>
+GestorReportes ..> ExportadorResultadosCSV : <<usa>>
+GestorReportes ..> EvaluacionDTO : <<arma/devuelve>>
+GestorReportes ..> ResultadoComparativoDTO : <<arma/devuelve>>
+GestorReportes ..> CandidatoOrdenMeritoDTO : <<arma/devuelve>>
+
+ImportadorExportador ..> ICandidatoDAO : <<usa>>
+ImportadorExportador ..> ICandidatoImportador : <<usa>>
+ImportadorExportador ..> ResultadoImportacionDTO : <<arma/devuelve>>
+
+FinalizarCuestionarios ..> ICuestionarioDAO : <<usa>>
+FinalizarCuestionarios ..> IRegistroAuditoriaDAO : <<usa>>
+
+' ============================================================
+' RELACIONES BOUNDARY -> SERVICE y BOUNDARY -> DTO
+' ============================================================
+UIAutenticacion ..> GestorAutenticacion : <<usa>>
+UIAutenticacion ..> UsuarioDTO : <<recibe>>
+UIAutenticacion ..> CandidatoCuestionarioDTO : <<recibe>>
+
+UIGestionPuestos ..> GestorPuestos : <<usa>>
+UIGestionPuestos ..> PuestoDTO : <<muestra/envia>>
+
+UIGestionCompetencias ..> GestorCompetencias : <<usa>>
+UIGestionCompetencias ..> CompetenciaDTO : <<muestra/envia>>
+
+UIGestionFactores ..> GestorFactores : <<usa>>
+UIGestionFactores ..> FactorDTO : <<muestra/envia>>
+
+UIGestionPreguntas ..> GestorPreguntas : <<usa>>
+UIGestionPreguntas ..> PreguntaDTO : <<muestra/envia>>
+UIGestionPreguntas ..> OpcionRespuestaDTO : <<muestra>>
+
+UIGestionOpciones ..> GestorOpcionesRespuesta : <<usa>>
+UIGestionOpciones ..> OpcionRespuestaDTO : <<muestra/envia>>
+
+UIEvaluarCandidatos ..> GestorEvaluaciones : <<usa>>
+UIEvaluarCandidatos ..> CandidatoGestionDTO : <<muestra/selecciona>>
+UIEvaluarCandidatos ..> PuestoDTO : <<muestra>>
+UIEvaluarCandidatos ..> CompetenciaDTO : <<muestra>>
+
+UICompletarCuestionario ..> GestorCuestionario : <<usa>>
+UICompletarCuestionario ..> PreguntaExamenDTO : <<muestra>>
+UICompletarCuestionario ..> RespuestaCandidatoDTO : <<envia>>
+
+UIReportes ..> GestorReportes : <<usa>>
+UIReportes ..> GestorPuestos : <<usa>>
+UIReportes ..> PuestoDTO : <<muestra>>
+UIReportes ..> EvaluacionDTO : <<muestra>>
+UIReportes ..> ResultadoComparativoDTO : <<renderiza grafico>>
+UIReportes ..> CandidatoOrdenMeritoDTO : <<muestra grilla>>
+
+UIImportarExportar ..> ImportadorExportador : <<usa>>
+UIImportarExportar ..> ResultadoImportacionDTO : <<muestra estadisticas>>
+UIImportarExportar ..> GestorReportes: <<usa>>
+
+' ============================================================
+' USO DE ENUMERACIONES
+' ============================================================
+Cuestionario ..> EstadoCuestionario : <<usa>>
+Candidato ..> TipoDocumento : <<usa>>
+Candidato ..> Genero : <<usa>>
+
+CandidatoCuestionarioDTO ..> EstadoCuestionario : <<usa>>
+CandidatoOrdenMeritoDTO ..> EstadoCuestionario : <<usa>>
+CandidatoGestionDTO ..> TipoDocumento : <<usa>>
+
+@enduml
