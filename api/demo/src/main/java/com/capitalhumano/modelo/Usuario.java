@@ -1,5 +1,7 @@
 package com.capitalhumano.modelo;
 
+import java.util.UUID;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +17,7 @@ public class Usuario {
 
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private UUID id;
 
     @Column 
     private String name;
