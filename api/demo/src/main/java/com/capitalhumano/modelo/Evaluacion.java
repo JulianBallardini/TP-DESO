@@ -1,7 +1,6 @@
 package com.capitalhumano.modelo;
 
 import java.sql.Date;
-import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,7 +17,7 @@ public class Evaluacion {
 
     @Id 
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private UUID id;
+    private Long id;
 
     @Column 
     private Date fechaCreacion;

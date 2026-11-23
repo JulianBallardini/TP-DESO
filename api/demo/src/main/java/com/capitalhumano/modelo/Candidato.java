@@ -24,6 +24,13 @@ public class Candidato {
         H, M, X;
     }
 
+    public enum TipoDocumento{
+        DNI,
+        LE,
+        LC,
+        PP
+    }
+
     @Id 
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long nroCandidato;
@@ -36,6 +43,10 @@ public class Candidato {
 
     @Column 
     private String nroDocumento;
+
+    @Enumerated (EnumType.STRING)
+    @Column 
+    private TipoDocumento tipoDocumento;
 
     @Column 
     private Date fechaNacimiento;

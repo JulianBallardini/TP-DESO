@@ -1,7 +1,6 @@
 package com.capitalhumano.modelo;
 
 import java.sql.Date;
-import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,7 +27,7 @@ public class Cuestionario {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private UUID idCuestionario;
+    private Long idCuestionario;
 
     @Column 
     private String clave;

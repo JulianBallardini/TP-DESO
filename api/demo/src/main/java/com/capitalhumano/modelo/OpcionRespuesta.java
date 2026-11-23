@@ -22,7 +22,7 @@ import lombok.Data;
 public class OpcionRespuesta {
 
     @Id 
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue (strategy = GenerationType.UUID)
     private UUID id;
 
     @Column 
