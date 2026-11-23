@@ -1,0 +1,9 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=capital-humano-db'
+      - 'POSTGRES_PASSWORD=capital123'
+      - 'POSTGRES_USER=capital'
+    ports:
+      - '5432'
