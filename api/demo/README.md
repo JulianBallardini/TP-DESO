@@ -14,20 +14,20 @@ implementación, según el diseño de clases del grupo:
 Lo que ya trae el proyecto base (`pom.xml`, generado con Spring Initializr):
 
 - Java 25 + Maven (con wrapper `mvnw`)
-- Spring Boot: webmvc + webflux, JDBC, security, docker-compose
+- Spring Boot: webmvc + webflux, data-jpa (JPA/Hibernate), security, docker-compose
 - PostgreSQL (driver) + Lombok
 - Tests: JUnit 5 (+ starters de test incluidos)
 
 Base de datos local: PostgreSQL 16 en Docker, base `capital_humano`
 (ver [`../../database/README.md`](../../database/README.md)). La base arranca
 vacía y las tablas se definen desde el backend al implementar el dominio
-(patrón DAO con JDBC).
+(patrón DAO sobre JPA).
 
 ## Estructura final de paquetes
 
-Paquete raíz del dominio: `com.capitalhumano`. La clase principal actual
-(`com.example.demo.DemoApplication`) y el paquete `com.example.demo` se
-reubican/renombran al implementar; por ahora quedan intactos.
+Paquete raíz del dominio: `com.capitalhumano`. La clase principal ya está en
+`com.capitalhumano.CapitalHumanoApplication` (el paquete inicial
+`com.example.demo` fue reemplazado).
 
 ```
 src/
@@ -72,7 +72,7 @@ SIN_CONTESTAR), `TipoDocumento` (DNI, LE, LC, PP), `Genero` (H, M, X).
 `IBloquePreguntasDAO`, `IPreguntaCuestionarioDAO`, `IRegistroAuditoriaDAO`,
 `IConfiguracionSistemaDAO`.
 
-Las implementaciones (JDBC) se agregan al implementar cada CU.
+Las implementaciones (JPA: EntityManager o Spring Data) se agregan al implementar cada CU.
 
 ### `service`: gestores e interfaces técnicas (15 + 2)
 
