@@ -64,11 +64,9 @@ public class Cuestionario {
     @JoinColumn(name = "cuestionario_id", nullable = false)
     private List<BloquePreguntas> bloques = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "cuestionario_id", nullable = false)
+    @OneToMany(mappedBy = "cuestionario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ResultadoFactor> resultadosFactores = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "cuestionario_id", nullable = false)
+    @OneToMany(mappedBy = "cuestionario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ResultadoCompetencia> resultadosCompetencias = new ArrayList<>();
 }

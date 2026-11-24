@@ -1,22 +1,21 @@
 package com.capitalhumano.dao;
 
-import java.util.ArrayList;
-import java.util.UUID;
+import java.util.Optional;
 
 import com.capitalhumano.modelo.Competencia;
 
 public interface ICompetenciaDao {
 
-    public ArrayList<Competencia> buscar(String nombre);
+    public Optional<Competencia[]> buscar(String nombre);
 
-    public Competencia findById(UUID id);
+    public Optional<Competencia> findById(String codigo);
 
     public void guardar(Competencia competencia);
 
     public void actualizar(Competencia competencia);
 
-    public void eliminarLogico(UUID id);
+    public void eliminarLogico(String codigo);
 
-    public boolean validarEnUso(UUID id);
+    public boolean validarEnUso(String codigo);
 
 }

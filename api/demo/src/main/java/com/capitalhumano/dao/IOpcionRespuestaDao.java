@@ -1,15 +1,15 @@
 package com.capitalhumano.dao;
 
-import java.util.ArrayList;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.capitalhumano.modelo.OpcionRespuesta;
 
 public interface IOpcionRespuestaDao {
 
-    public ArrayList<OpcionRespuesta> buscarOpciones(String nombre);
+    public Optional<OpcionRespuesta[]> buscarOpciones(String nombre);
 
-    public OpcionRespuesta findById(UUID id);
+    public Optional<OpcionRespuesta> findById(UUID id);
 
     public void guardar(OpcionRespuesta opcionRespuesta);
 

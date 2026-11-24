@@ -43,8 +43,7 @@ public class Pregunta {
     @JoinColumn(name = "opcion_respuesta_id", nullable = false)
     private OpcionRespuesta opcionRespuesta;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "pregunta_id", nullable = false)
+    @OneToMany(mappedBy = "pregunta", cascade = CascadeType.ALL, orphanRemoval = true)
     @Size(min = 2)
     private List<OpcionPregunta> opcionesPregunta = new ArrayList<>();
 }

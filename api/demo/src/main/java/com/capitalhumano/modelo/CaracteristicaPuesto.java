@@ -10,6 +10,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data 
 @Entity 
@@ -26,6 +28,8 @@ public class CaracteristicaPuesto {
     // Relaciones
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "puesto_id", nullable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Puesto puesto;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

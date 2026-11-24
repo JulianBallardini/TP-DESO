@@ -34,8 +34,7 @@ public class Puesto {
     private boolean activo;
 
     // Relaciones
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "puesto_id", nullable = false)
+    @OneToMany(mappedBy = "puesto", cascade = CascadeType.ALL, orphanRemoval = true)
     @Size(min = 1)
     private List<CaracteristicaPuesto> caracteristicas = new ArrayList<>();
 }

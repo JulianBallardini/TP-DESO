@@ -1,22 +1,21 @@
 package com.capitalhumano.dao;
 
-import java.util.ArrayList;
-import java.util.UUID;
+import java.util.Optional;
 
 import com.capitalhumano.modelo.Candidato;
 import com.capitalhumano.modelo.Candidato.TipoDocumento;
 
 public interface ICandidatoDao {
 
-    public ArrayList<Candidato> buscar(String apellido, String nombre, int nro);
+    public Optional<Candidato[]> buscar(String apellido, String nombre, Long nro);
 
-    public Candidato buscarPorCandidato(TipoDocumento tipo, String nro);
+    public Optional<Candidato> buscarPorCandidato(TipoDocumento tipo, String nro);
 
-    public Candidato findById(int id);
+    public Optional<Candidato> findById(Long id);
 
     public void guardar(Candidato candidato);
 
     public void actualizar(Candidato candidato);
 
-    public void eliminarLogico(UUID id);
+    public void eliminarLogico(Long id);
 }

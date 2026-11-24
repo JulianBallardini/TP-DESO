@@ -30,7 +30,6 @@ public class Competencia {
     private boolean activo;
 
     // Relaciones
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "competencia_id")
+    @OneToMany(mappedBy = "competencia", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Factor> factores = new ArrayList<>();
 }
