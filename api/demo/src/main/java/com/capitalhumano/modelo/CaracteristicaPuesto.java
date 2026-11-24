@@ -11,7 +11,6 @@ import lombok.Data;
 @Table (name = "caracteristica_puesto")
 public class CaracteristicaPuesto {
 
-
     @Id 
     private double ponderacionMinima;
 
