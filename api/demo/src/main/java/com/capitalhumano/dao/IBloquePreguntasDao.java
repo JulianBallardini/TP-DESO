@@ -1,14 +1,13 @@
 package com.capitalhumano.dao;
 
-import java.util.ArrayList;
-import java.util.UUID;
+import java.util.Optional;
 
 import com.capitalhumano.modelo.BloquePreguntas;
 
 public interface IBloquePreguntasDao {
     public void guardar(BloquePreguntas bloquePreguntas);
 
-    public BloquePreguntas findById(UUID id);
+    public Optional<BloquePreguntas> findById(Long id);
 
-    public ArrayList<BloquePreguntas> recuperarBloquesPorCuestionario(UUID idCuestionario);
+    public Optional<BloquePreguntas[]> recuperarBloquesPorCuestionario(Long idCuestionario);
 }

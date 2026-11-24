@@ -1,7 +1,6 @@
 package com.capitalhumano.dao;
 
-import java.util.ArrayList;
-import java.util.UUID;
+import java.util.Optional;
 
 import com.capitalhumano.modelo.Cuestionario;
 import com.capitalhumano.modelo.Candidato.TipoDocumento;
@@ -12,14 +11,14 @@ public interface ICuestionarioDao {
 
     public void actualizar(Cuestionario cuestionario);
 
-    public Cuestionario findById(UUID id);
+    public Optional<Cuestionario> findById(Long id);
 
-    public Cuestionario buscarActivoPorCandidato(UUID idCandidato);
+    public Optional<Cuestionario> buscarActivoPorCandidato(Long idCandidato);
 
-    public Cuestionario buscarPorClaveYDoc(TipoDocumento tipoDocumento, String nro, String clave);
+    public Optional<Cuestionario> buscarPorClaveYDoc(TipoDocumento tipoDocumento, String nro, String clave);
 
-    public ArrayList<Cuestionario> listarVencidos();
+    public Optional<Cuestionario[]> listarVencidos();
 
-    public ArrayList<Cuestionario> listarPorPuestoYEvaluacion(UUID idPuesto, UUID idEvaluacion);
+    public Optional<Cuestionario[]> listarPorPuestoYEvaluacion(String codigoPuesto, Long idEvaluacion);
 
 }

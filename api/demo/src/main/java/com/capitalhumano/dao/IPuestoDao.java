@@ -1,15 +1,14 @@
 package com.capitalhumano.dao;
 
-import java.util.ArrayList;
-import java.util.UUID;
+import java.util.Optional;
 
 import com.capitalhumano.modelo.Puesto;
 
 public interface IPuestoDao {
 
-    public ArrayList<Puesto> buscar(String codigo, String nombre, String empresa);
+    public Optional<Puesto[]> buscar(String codigo, String nombre, String empresa);
 
-    public Puesto findById(UUID id);
+    public Optional<Puesto> findById(String codigo);
 
     public void guardar(Puesto puesto);
 
@@ -17,5 +16,5 @@ public interface IPuestoDao {
 
     public void eliminarLogico(Puesto puesto);
 
-    public boolean validarEnUso(UUID id);
+    public boolean validarEnUso(String codigo);
 }

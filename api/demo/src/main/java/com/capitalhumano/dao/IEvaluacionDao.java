@@ -1,7 +1,6 @@
 package com.capitalhumano.dao;
 
-import java.util.ArrayList;
-import java.util.UUID;
+import java.util.Optional;
 
 import com.capitalhumano.modelo.Evaluacion;
 
@@ -9,7 +8,7 @@ public interface IEvaluacionDao {
 
     public void guardar(Evaluacion evaluacion);
 
-    public Evaluacion findById(UUID id);
+    public Optional<Evaluacion> findById(Long id);
 
-    public ArrayList<Evaluacion> listarPorPuesto(UUID idPuesto);
+    public Optional<Evaluacion[]> listarPorPuesto(String codigoPuesto);
 }

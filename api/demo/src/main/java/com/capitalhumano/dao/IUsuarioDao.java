@@ -1,11 +1,13 @@
 package com.capitalhumano.dao;
 
+import java.util.Optional;
+
 import com.capitalhumano.modelo.Usuario;
 
 public interface IUsuarioDao {
 
-    public Usuario buscarPorUser(String user);
+    public Optional<Usuario> buscarPorUser(String user);
 
-    public Usuario findById(int id);
+    public Optional<Usuario> findById(Long id);
 
 }
